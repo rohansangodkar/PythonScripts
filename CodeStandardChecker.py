@@ -5,8 +5,9 @@ import datetime
 import os
 
  
+# Code by ROHAN SANGODKAR.
 
-if not os.path.exists(r"G:\Users\Scripts\team_list\ACQ.txt"):
+if not os.path.exists(r"G:\Users\Scripts\team_list\ACQ.txt"): #Checks if the path exists.
 
                 print(r"G drive is not connected!! Cannot access G:\Users\Scripts\team_list\ACQ.txt")
 
@@ -16,13 +17,13 @@ if not os.path.exists(r"G:\Users\Scripts\team_list\ACQ.txt"):
 
 with open (r"G:\Users\Scripts\team_list\ACQ.txt","r") as name:
 
-                names = name.readlines()
+                names = name.readlines() #loads the data into names.
 
-               
-
- 
-
+                
 def year_tag_checker(file,data):
+    """
+    This function checks if the copyright tag at the top reflects the year from the Synergy tag or not.
+    """
 
     count = 0
 
@@ -59,460 +60,493 @@ def year_tag_checker(file,data):
  
 
 def path_checker(p):
+    """
+    Checks the existance of the user provided path.
+    """
 
-        return os.path.isdir(p)
+    return os.path.isdir(p)
 
  
 
 def pr_format_checker(pr):
+    """
+    Checks the format of user provided PR#."
+    """
 
-        pr=pr.strip()
+    pr=pr.strip()
 
-        if len(pr) < 7 or len(pr) > 9:
+    if len(pr) < 7 or len(pr) > 9:
 
-                return False
+            return False
 
-        if pr[:2].lower() != "uk":
+    if pr[:2].lower() != "uk":
 
-                return False
+            return False
 
-        if not pr[2].isnumeric():
+    if not pr[2].isnumeric():
 
-                return False
+            return False
 
-        if "#" not in pr:
+    if "#" not in pr:
 
-                return False
+            return False
 
-        if not pr[5:].isnumeric():
+    if not pr[5:].isnumeric():
 
-                return False
+            return False
 
-        return True
+    return True
 
  
 
 def pr_checker(file,pr):
+    """
+    Checks if the PR# is mentioned int the code or not."
+    """
 
-        return pr.lower() in file.lower()
+    return pr.lower() in file.lower()
 
  
 
 def version_checker(content):
+    """
+    Checks if the version in the Synergy generated tag & the version
+    mentioned in the change log is matching or not.
+    """
 
-        count = 0
+    count = 0
 
-        while count < 3:
+    while count < 3:
 
-                for line in content:
+            for line in content:
 
-                        line=line.strip()
+                    line=line.strip()
 
-                        if "version" in line.lower():
+                    if "version" in line.lower():
 
-                                count+=1
+                            count+=1
 
-                                line_splt=line.split(" ")
+                            line_splt=line.split(" ")
 
-                                if count == 1:
+                            if count == 1:
 
-                                        comp = line_splt[1]
+                                    comp = line_splt[1]
 
                                                        
 
-                                else:
+                            else:
 
-                                        for l in line_splt:
+                                    for l in line_splt:
 
-                                                if "*" not in l and "version" not in l.lower() and ":" not in l and "-" not in l :
+                                            if "*" not in l and "version" not in l.lower() and ":" not in l and "-" not in l :
 
-                                                        if comp == l:
+                                                    if comp == l:
 
-                                                                return True
+                                                            return True
 
-                                                        else:
+                                                    else:
 
-                                                                return False
+                                                            return False
 
  
 
 def log_date_checker(listdata):
+    """
+    Checks if the date mentioned in the Synergy generated tag & the date in the
+    change log is matching or not.
+    """
 
-        count = 0
+    count = 0
 
-        dde = ""
+    dde = ""
 
-        calendar={"Jan":"01","Feb":"02","Mar":"03","Apr":"04","May":"05","Jun":"06","Jul":"07","Aug":"08","Sep":"09","Oct":"10","Nov":"11","Dec":"12"}
+    calendar={"Jan":"01","Feb":"02","Mar":"03","Apr":"04","May":"05","Jun":"06","Jul":"07","Aug":"08","Sep":"09","Oct":"10","Nov":"11","Dec":"12"}
 
-        days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
 
        
 
-        for l in listdata:
+    for l in listdata:
 
-                if "%" in l:
+            if "%" in l:
 
-                        count+=1
+                    count+=1
 
-                        if count == 2:
+                    if count == 2:
 
-                                l=l.strip()
+                            l=l.strip()
 
-                                l_splt = [x for x in l.split(" ") if x!= '']
+                            l_splt = [x for x in l.split(" ") if x!= '']
 
-                                if l_splt[1] in days:
+                            if l_splt[1] in days:
 
-                                        if len(l_splt[3]) == 1:
+                                    if len(l_splt[3]) == 1:
 
-                                                dde+="0"
+                                            dde+="0"
 
-                                                dde+=l_splt[3]
+                                            dde+=l_splt[3]
 
-                                        else:
+                                    else:
 
-                                                dde = l_splt[3]
+                                            dde = l_splt[3]
 
-                                        date1 = "{dd}/{mm}/{yyyy}".format(dd=dde,mm=calendar[l_splt[2]],yyyy=l_splt[-2])
+                                    date1 = "{dd}/{mm}/{yyyy}".format(dd=dde,mm=calendar[l_splt[2]],yyyy=l_splt[-2])
 
-                                else:
+                            else:
 
-                                        date1 = "{dd}/{mm}/{yyyy}".format(dd=l_splt[1],mm=calendar[l_splt[2][:3]],yyyy=l_splt[3])
+                                    date1 = "{dd}/{mm}/{yyyy}".format(dd=l_splt[1],mm=calendar[l_splt[2][:3]],yyyy=l_splt[3])
 
-        count = 0
+    count = 0
 
-        for l in listdata:
+    for l in listdata:
 
-                if "created" in l.lower():
+            if "created" in l.lower():
 
-                        count+=1
+                    count+=1
 
-                        if count == 2:
+                    if count == 2:
 
-                                l=l.strip()
+                            l=l.strip()
 
-                                l_splt = [x for x in l.split(" ") if x!= '']
+                            l_splt = [x for x in l.split(" ") if x!= '']
 
-                                t=0
+                            t=0
 
-                                while t == 0:
+                            while t == 0:
 
-                                        for e in l_splt:
+                                    for e in l_splt:
 
-                                                if "/" in e:
+                                            if "/" in e:
 
-                                                        date2 = e[:10]
+                                                    date2 = e[:10]
 
-                                                        t=1
+                                                    t=1
 
-        return date1 == date2
+    return date1 == date2
 
  
 
 def name_check(data):
+    """
+    Checks if the latest change log belongs to the developer from the concerned team.
+    """
 
-        for l in data:
+    for l in data:
 
-                if "author" in l.lower():
+            if "author" in l.lower():
 
-                        for n in names:
+                    for n in names:
 
-                                n = n.strip()
+                            n = n.strip()
 
-                                if n.lower() in l.lower():
+                            if n.lower() in l.lower():
 
-                                        return True
+                                    return True
 
-                        return False
+                    return False
 
  
 
 def tab_check(data):
+    """
+    Checks if there are any accidental tabs in the code.
+    """
 
-        tab_err =[]
+    tab_err =[]
 
-        for d in data:
+    for d in data:
 
-                if "\t" in d:
+            if "\t" in d:
 
-                        if str(data.index(d)+1) not in tab_err:
+                    if str(data.index(d)+1) not in tab_err:
 
-                                tab_err.append(str(data.index(d)+1))
+                            tab_err.append(str(data.index(d)+1))
 
-        return tab_err
+    return tab_err
 
  
 
 def length_check(data):
+    """
+    Checks if there is any character beyond 81st column in the code.
+    """
 
-        len_err = []
+    len_err = []
 
-        for d in data:
+    for d in data:
 
-                if len(d) > 81:
+            if len(d) > 81:
 
-                        if str(data.index(d)+1) not in len_err:
+                    if str(data.index(d)+1) not in len_err:
 
-                                len_err.append(str(data.index(d)+1))
+                            len_err.append(str(data.index(d)+1))
 
-        return len_err
+    return len_err
 
  
 
 
 def tag_check(data,pr):
+    """
+    Checks if the newly added code tags are properly aligned or not.
+    """
 
-        pre1 = "01I"+pr[5:]
+    pre1 = "01I"+pr[5:]
 
-        pre2 = "01M"+pr[5:]
+    pre2 = "01M"+pr[5:]
 
-        pr_tag = [pre1,pre2]
+    pr_tag = [pre1,pre2]
 
-        count = 0
+    count = 0
 
-        err = []
+    err = []
 
-        for d in data:
+    for d in data:
 
-            count+=1
+        count+=1
 
-            if pr_tag[0] in d:
+        if pr_tag[0] in d:
 
-                if d[72:80] != pr_tag[0]:
+            if d[72:80] != pr_tag[0]:
 
-                    err.append(count)
+                err.append(count)
 
-            elif pr_tag[1] in d:
+        elif pr_tag[1] in d:
 
-                if d[72:80] != pr_tag[1]:
+            if d[72:80] != pr_tag[1]:
 
-                    err.append(count)
+                err.append(count)
 
-        return err
+    return err
 
    
 
 def cobol_section_check(data):
+    """
+    Checks if there are any duplicate sections or paragraphs in the COBOL code.
+    """
 
-        section = []
+    section = []
 
-        exits = []
+    exits = []
 
-        for d in data:
+    for d in data:
 
-                if "SECTION." in d:
+            if "SECTION." in d:
 
-                        d = d.strip()
+                    d = d.strip()
 
-                        splt = d.split(" ")
+                    splt = d.split(" ")
 
-                        if splt[0][0] != "*" and splt[0].lower() != "file":
+                    if splt[0][0] != "*" and splt[0].lower() != "file":
 
-                                if splt[0] in section:
+                            if splt[0] in section:
 
-                                        return splt[0]
+                                    return splt[0]
 
-                                section.append(splt[0])
+                            section.append(splt[0])
  
 
-        return "noerror"
+    return "noerror"
 
  
 
 def print_final_result(data):
+    """
+    Prints final report.
+    """
 
-        i=0
+    i=0
 
-        print("-----------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------")
 
-        print("Component    |  Review comment")
+    print("Component    |  Review comment")
 
-        print("-----------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------")
 
-        while i < len(data):
+    while i < len(data):
 
-                print("{ele} | {reason}".format(ele=data[i],reason=data[i+1]))
+            print("{ele} | {reason}".format(ele=data[i],reason=data[i+1]))
 
-                i+=2
+            i+=2
 
-        print("-----------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------")
 
-        print("Total review comments : {c}".format(c=len(data)//2))
+    print("Total review comments : {c}".format(c=len(data)//2))
 
  
 
  
 
 if __name__ == '__main__':
-
  
-
-        report=[]
+    report=[]
 
        
 
-        PR = input("Please enter your PR# : ")
+    PR = input("Please enter your PR# : ")
 
-        if not pr_format_checker(PR):
+    if not pr_format_checker(PR):
 
-                print("Invalid PR!!!")
+            print("Invalid PR!!!")
 
-                exit(1)
+            exit(1)
 
-        path = input("Please enter the folder path where you have placed all the components to be  reviewed : ")
+    path = input("Please enter the folder path where you have placed all the components to be  reviewed : ")
 
-        if not path_checker(path):
+    if not path_checker(path):
 
-                print("Invalid path!!!")
+            print("Invalid path!!!")
 
-                exit(1)
+            exit(1)
 
                
 
-        error_log = {1:"Company copyright tag is not proper.",2:"PR# not present in the code logs.",3:"Incorrect version number in the logs.",
+    error_log = {1:"Company copyright tag is not proper.",2:"PR# not present in the code logs.",3:"Incorrect version number in the logs.",
 
-                     4:"Date in the modlog doesn't match with the checkout date.",5:"Latest code log does not belong to the ACQ developer.",
+                4:"Date in the modlog doesn't match with the checkout date.",5:"Latest code log does not belong to the ACQ developer.",
 
-                     6:"Tabs are present in the code",7:"Some data is present after the 81st column",8:"Tags are misaligned or some junk value present in the column 72 till 80",
+                6:"Tabs are present in the code",7:"Some data is present after the 81st column",8:"Tags are misaligned or some junk value present in the column 72 till 80",
 
-                     9:"tag is repeated in the COBOL code."}
+                9:"tag is repeated in the COBOL code."}
 
        
 
-        for file in os.listdir(path):
+    for file in os.listdir(path):
 
-                element_path = os.path.join(path,file)
+            element_path = os.path.join(path,file)
 
-                with open (element_path,"r") as f_content:
+            with open (element_path,"r") as f_content:
 
-                        content_array = f_content.readlines()
+                    content_array = f_content.readlines()
 
-                        content_line = " ".join(content_array)
+                    content_line = " ".join(content_array)
 
                        
 
-                        if "(c)" in content_array[1]:
+                    if "(c)" in content_array[1]:
 
-                                line = 1
+                            line = 1
 
-                        else:
+                    else:
 
-                                line = 2
+                            line = 2
 
-                        if not year_tag_checker(content_array[line],content_array):
+                    if not year_tag_checker(content_array[line],content_array):
 
-                                report.append(file)
+                            report.append(file)
 
-                                report.append(error_log[1])
-
- 
-
-                        if not pr_checker(content_line,PR):
-
-                                report.append(file)
-
-                                report.append(error_log[2])
+                            report.append(error_log[1])
 
  
 
-                        if not version_checker(content_array):
+                    if not pr_checker(content_line,PR):
 
-                                report.append(file)
+                            report.append(file)
 
-                                report.append(error_log[3])
-
- 
-
-                        if not log_date_checker(content_array):
-
-                                report.append(file)
-
-                                report.append(error_log[4])
+                            report.append(error_log[2])
 
  
 
-                        if not name_check(content_array):
+                    if not version_checker(content_array):
 
-                                report.append(file)
+                            report.append(file)
 
-                                report.append(error_log[5])
+                            report.append(error_log[3])
 
  
 
-                        tab_err = tab_check(content_array)
+                    if not log_date_checker(content_array):
 
-                        if len(tab_err) > 0:
+                            report.append(file)
 
-                                msg_tab=""
+                            report.append(error_log[4])
 
-                                report.append(file)
+ 
 
-                                msg_tab+=error_log[6]
+                    if not name_check(content_array):
 
-                                msg_tab+=" in the following line nos:"
+                            report.append(file)
 
-                                msg_tab+= ",".join(tab_err)
+                            report.append(error_log[5])
 
-                                report.append(msg_tab)
+ 
+
+                    tab_err = tab_check(content_array)
+
+                    if len(tab_err) > 0:
+
+                            msg_tab=""
+
+                            report.append(file)
+
+                            msg_tab+=error_log[6]
+
+                            msg_tab+=" in the following line nos:"
+
+                            msg_tab+= ",".join(tab_err)
+
+                            report.append(msg_tab)
 
                                
 
-                        len_err = length_check(content_array)
+                    len_err = length_check(content_array)
 
-                        if len(len_err) > 0:
+                    if len(len_err) > 0:
 
-                                len_msg=""
+                            len_msg=""
 
-                                report.append(file)
+                            report.append(file)
 
-                                len_msg+=error_log[7]
+                            len_msg+=error_log[7]
 
-                                len_msg+=" for the following line nos:"
+                            len_msg+=" for the following line nos:"
 
-                                len_msg+= ",".join(len_err)
+                            len_msg+= ",".join(len_err)
 
-                                report.append(len_msg)
+                            report.append(len_msg)
 
  
 
-                        if ".cbl" in file.lower():
+                    if ".cbl" in file.lower():
 
-                            tag_err = tag_check(content_array,PR)
+                        tag_err = tag_check(content_array,PR)
 
-                            if len(tag_err) > 0:
+                        if len(tag_err) > 0:
 
-                                tag_msg=""
+                            tag_msg=""
 
-                                report.append(file)
+                            report.append(file)
 
-                                tag_msg+=error_log[8]
+                            tag_msg+=error_log[8]
 
-                                tag_msg+=" for the following line nos:"
+                            tag_msg+=" for the following line nos:"
 
-                                tag_msg+=",".join(tag_err)
+                            tag_msg+=",".join(tag_err)
 
-                                report.append(tag_msg)
+                            report.append(tag_msg)
 
                                 
 
-                            ret_cob = cobol_section_check(content_array)
+                        ret_cob = cobol_section_check(content_array)
 
-                            if ret_cob != "noerror":
+                        if ret_cob != "noerror":
 
-                                msg_cob=""
+                            msg_cob=""
 
-                                report.append(file)
+                            report.append(file)
 
-                                msg_cob+=ret_cob
+                            msg_cob+=ret_cob
 
-                                msg_cob+=error_log[9]
+                            msg_cob+=error_log[9]
 
-                                report.append(msg_cob)
+                            report.append(msg_cob)
 
  
 
                                
 
-        print_final_result(report)
+    print_final_result(report)
 
        
 
