@@ -8,6 +8,10 @@ This repository contains a collection of Python automation scripts that I have w
 
 This script checks the coding standards of components such as SQL, COBOL, Copybooks, etc. by performing static code analysis. It helps ensure consistent and maintainable code by highlighting potential issues and deviations from the defined standards.
 
+### PackageCreationUtility.py
+
+This script creates a standard folder structure & zips it. The zipped file is a pre-requisite for the further package creation process. This script takes numerous inputs from the user such as various local IBM Synergy paths, PR# (change numbers), destination folder etc.
+
 ## Usage
 
 Feel free to explore and utilize these scripts according to your requirements. Each script is self-contained and can be run independently. Before running the scripts, please make sure you have the necessary dependencies installed.
