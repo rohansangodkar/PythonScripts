@@ -12,6 +12,14 @@ This script checks the coding standards of components such as SQL, COBOL, Copybo
 
 This script creates a standard folder structure & zips it. The zipped file is a pre-requisite for the further package creation process. This script takes numerous inputs from the user such as various local IBM Synergy paths, PR# (change numbers), destination folder etc.
 
+### Leave_tracker_tool.py
+
+This script was created for the in-house PMO team to generate a report for resources with leaves.
+
+### Final_invoicing_Tool.py
+
+This script was created for the in-house PMO team to generate an invoicing report.
+
 ## Usage
 
 Feel free to explore and utilize these scripts according to your requirements. Each script is self-contained and can be run independently. Before running the scripts, please make sure you have the necessary dependencies installed.
