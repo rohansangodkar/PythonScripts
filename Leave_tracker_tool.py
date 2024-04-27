@@ -15,9 +15,9 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Alignment
 from pandas._libs.tslibs.timestamps import Timestamp
 
-Res_sheet = pd.read_excel(r"C:\Users\singhalr\OneDrive - ACI Worldwide Corp\Automation\Leave_tracker\ACI_RES_SHEET.xlsx")
+Res_sheet = pd.read_excel(r"C:\Users\user\OneDrive - COM Worldwide Corp\Automation\Leave_tracker\COM_RES_SHEET.xlsx")
 
-path = r"C:\Users\singhalr\OneDrive - ACI Worldwide Corp\Automation\Leave_tracker\test"
+path = r"C:\Users\user\OneDrive - COM Worldwide Corp\Automation\Leave_tracker\test"
 
 files =  os.listdir(path)
 md={}

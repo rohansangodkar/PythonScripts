@@ -49,7 +49,7 @@ for day in range(num_days):
     else:
         cal.append(0)
 
-ACI = 'ACI resourcing sheet'
+COM = 'COM resourcing sheet'
 EXP = 'SOW_Exceptions'
 
 limit = 0
@@ -73,7 +73,7 @@ EXP_Flag = False
 
 while limit <3 : 
         print(" ")
-        data_file = input('Please, Enter the path of ACI Resource File: ')
+        data_file = input('Please, Enter the path of COM Resource File: ')
         if data_file[0]==r"'" or data_file[0]==r'"':
             data_file=data_file[1:]
         if data_file[-1]==r"'" or data_file[-1]==r'"':
@@ -84,7 +84,7 @@ while limit <3 :
             sheet=data.sheet_names
             Found = False
             for a in sheet:
-                if a.lower().strip() == ACI.lower().strip():
+                if a.lower().strip() == COM.lower().strip():
                     data_A = pd.read_excel(data,sheet_name=a)
                     Found = True
                 if a.lower().strip() == EXP.lower().strip():
@@ -96,10 +96,10 @@ while limit <3 :
                 break
             else:
                 limit +=1
-                print('ACI resourcing sheet - tab name not found. Try again')                           
+                print('COM resourcing sheet - tab name not found. Try again')                           
         else:
             limit +=1
-            input("Wrong ACI Resource file path. Try again!")
+            input("Wrong COM Resource file path. Try again!")
 
 if limit == 3:
     print("Too many attempts. Try again!")
@@ -508,7 +508,7 @@ df.to_excel(excel_writer, sheet_name='Invoice', index = False)
 
 wb = excel_writer.book
 ws = excel_writer.sheets["Invoice"]
-no_acid = []
+no_COMd = []
 
 blue = PatternFill(start_color='ADD8E6',end_color='ADD8E6', fill_type='solid')
 black = PatternFill(start_color='000000',end_color='000000', fill_type='solid')
@@ -627,7 +627,7 @@ for e in Empid:
                     ws.cell(row=row_data, column= col_data, value = (s*(1.25*Rate[e])))
                     row_data+=1
     else:
-        no_acid.append(e)
+        no_COMd.append(e)
         allid.append(e)
 
 for row in ws.iter_rows(min_row=1):
@@ -646,7 +646,7 @@ ws = excel_writer.sheets["Defaulter"]
 
 nodate_id = []
 for id in visited:
-    if id not in nodate and id not in no_acid:
+    if id not in nodate and id not in no_COMd:
         allid.remove(id)
     else:
         nodate_id.append(id)
@@ -655,8 +655,8 @@ row_data=2
 
 for id in allid:
     ws.cell(row=row_data, column= 1, value = id)
-    if id in no_acid:
-        ws.cell(row=row_data, column= 2, value = 'Employee Record not Present in ACI')
+    if id in no_COMd:
+        ws.cell(row=row_data, column= 2, value = 'Employee Record not Present in COM')
     elif id in nodate_id:
         ws.cell(row=row_data, column= 2, value = '1 or more Missing Timesheets') 
     else:
